@@ -1,10 +1,10 @@
-add_executable(mytest test.c unity_config.c)
+add_executable(mytest test.c unity_config.c ${CMAKE_SOURCE_DIR}/src/hello_freertos.c)
 
 target_link_libraries(mytest PRIVATE
     pico_stdlib
     unity)
 
-# target_include_directories(mytest PRIVATE ${CMAKE_SOURCE_DIR})
+target_include_directories(mytest PRIVATE ${CMAKE_SOURCE_DIR}/test)
 
 pico_set_binary_type(mytest no_flash)
 

@@ -24,28 +24,6 @@ project(myproject C CXX ASM)
 
 # These are some macros from the pico SDK that do some setup.
 pico_sdk_init()
-pico_set_program_name(myproject "test")
-pico_set_program_version(myproject "0.1")
-
-# Modify the below lines to enable/disable output over UART/USB
-pico_enable_stdio_uart(myproject 1)
-pico_enable_stdio_usb(myproject 0)
-
-# Add the standard library to the build
-target_link_libraries(myproject PRIVATE
-    pico_async_context_freertos
-    FreeRTOS-Kernel-Heap4
-    pico_stdlib
-    )
-
-# The CYW43 is the Wifi/Bluetooth module. If the board is set to pico_w, this
-# variable will be set and the wireless libraries added.
-if(PICO_CYW43_SUPPORTED)
-    # For led support on pico_w
-    target_link_libraries(myproject PRIVATE
-        pico_cyw43_arch_none
-    )
-endif()
 
 # This sets a preprocessor value for use in our code.
 add_compile_definitions(
