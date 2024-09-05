@@ -2,10 +2,13 @@
 	path = pico-sdk
 	url = git@github.com:raspberrypi/pico-sdk.git
     shallow = true
-    branch = master
+    branch = 2.0.0
 
-[submodule "pico-sdk"]
-	path = pico-sdk
+[submodule "freertos"]
+	path = freertos
 	url = git@github.com:FreeRTOS/FreeRTOS-Kernel.git
     shallow = true
     branch = V11.1.0
+[submodule "unity"]
+	path = unity
+	url = git@github.com:ThrowTheSwitch/Unity.git
