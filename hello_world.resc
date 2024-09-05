@@ -1,0 +1,21 @@
+logFile $cwd/hello_world-renode.log True
+
+$name?="rpi_pico_rp2040_w"
+$elf?=@main.elf
+
+using sysbus
+mach create $name
+
+machine LoadPlatformDescription $cwd/rpi_pico_rp2040_w.repl
+
+showAnalyzer uart0
+uart0 RecordToAsciinema $cwd/hello_world-asciinema
+echo $elf
+
+sysbus LoadELF $elf
+#cpu0 VectorTableOffset `sysbus GetSymbolAddress "__VECTOR_TABLE"`
+sysbus LoadELF @https://zephyr-dashboard.renode.io/zephyr/f9e3b65d3a9794ee2233aa88172346f887b48d04/rpi_pico_rp2040_w/hello_world/hello_world.elf
+cpu0 VectorTableOffset `sysbus GetSymbolAddress "_vector_table"`
+cpu1 IsHalted true
+cpu0 EnableProfilerCollapsedStack $cwd/hello_world-profile true
+start
