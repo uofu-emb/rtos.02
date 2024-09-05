@@ -1,0 +1,11 @@
+[submodule "pico-sdk"]
+	path = pico-sdk
+	url = git@github.com:raspberrypi/pico-sdk.git
+    shallow = true
+    branch = master
+
+[submodule "pico-sdk"]
+	path = pico-sdk
+	url = git@github.com:FreeRTOS/FreeRTOS-Kernel.git
+    shallow = true
+    branch = V11.1.0
