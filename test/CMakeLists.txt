@@ -2,11 +2,11 @@ add_executable(mytest test.c unity_config.c)# ${CMAKE_SOURCE_DIR}/src/hello_free
 
 target_link_libraries(mytest PRIVATE
   pico_stdlib
-  # pico_multicore
   # pico_async_context_freertos
   # FreeRTOS-Kernel-Heap4
-  unity
+  # unity
 )
+
 # The CYW43 is the Wifi/Bluetooth module. If the board is set to pico_w, this
 # variable will be set and the wireless libraries added.
 if(PICO_CYW43_SUPPORTED)
@@ -16,8 +16,8 @@ if(PICO_CYW43_SUPPORTED)
     )
 endif()
 
-# pico_set_binary_type(mytest no_flash)
 
+# pico_set_binary_type(mytest no_flash)
 pico_enable_stdio_uart(mytest 1)
 
 find_program(RENODE renode)

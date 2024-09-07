@@ -1,3 +1,6 @@
+bootrom: Memory.MappedMemory @ sysbus 0x00000000
+    size: 0x4000
+
 flash0: Memory.MappedMemory @ sysbus 0x10000000
     size: 0x200000
 
