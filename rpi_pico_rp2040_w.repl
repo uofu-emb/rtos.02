@@ -39,7 +39,7 @@ dwt: Miscellaneous.DWT @ sysbus 0xE0001000
 
 sysbus:
     init:
-        ApplySVD @https://dl.antmicro.com/projects/renode/svd/RP2040.svd.gz
+        ApplySVD @./lib/pico-sdk/src/rp2040/hardware_regs/RP2040.svd
         Tag <0x4000C008 4> "RESET_DONE" 0xFFFFFFFF
         Tag <0x40024004 4> "XOSC_STATUS" 0xFFFFFFFF
         Tag <0x40028000 4> "PLL_SYS_CS" 0xFFFFFFFF
