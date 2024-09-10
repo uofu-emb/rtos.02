@@ -39,7 +39,7 @@ dwt: Miscellaneous.DWT @ sysbus 0xE0001000
 
 sysbus:
     init:
-        ApplySVD @./lib/pico-sdk/src/rp2040/hardware_regs/RP2040.svd
+        ApplySVD $WORKING/lib/pico-sdk/src/rp2040/hardware_regs/RP2040.svd
         // This just clobbers the spinlocks to get it working.
         Tag <0xD0000100 4> "SPINLOCK0" 0x1
         Tag <0xD0000104 4> "SPINLOCK1" 0x1
