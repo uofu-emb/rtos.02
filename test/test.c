@@ -5,7 +5,7 @@ int main() {
     stdio_init_all();
     while (1) {
         printf("hello world!\n");
-        sleep_ms(1000);
+        sleep_ms(1);
     }
     return 0;
 }

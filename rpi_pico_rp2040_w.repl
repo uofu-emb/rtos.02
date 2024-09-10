@@ -40,39 +40,6 @@ dwt: Miscellaneous.DWT @ sysbus 0xE0001000
 sysbus:
     init:
         ApplySVD $WORKING/lib/pico-sdk/src/rp2040/hardware_regs/RP2040.svd
-        // This just clobbers the spinlocks to get it working.
-        Tag <0xD0000100 4> "SPINLOCK0" 0x1
-        Tag <0xD0000104 4> "SPINLOCK1" 0x1
-        Tag <0xD0000108 4> "SPINLOCK2" 0x1
-        Tag <0xD000010c 4> "SPINLOCK3" 0x1
-        Tag <0xD0000110 4> "SPINLOCK4" 0x1
-        Tag <0xD0000114 4> "SPINLOCK5" 0x1
-        Tag <0xD0000118 4> "SPINLOCK6" 0x1
-        Tag <0xD000011c 4> "SPINLOCK7" 0x1
-        Tag <0xD0000120 4> "SPINLOCK8" 0x1
-        Tag <0xD0000124 4> "SPINLOCK9" 0x1
-        Tag <0xD0000128 4> "SPINLOCK10" 0x1
-        Tag <0xD000012c 4> "SPINLOCK11" 0x1
-        Tag <0xD0000130 4> "SPINLOCK12" 0x1
-        Tag <0xD0000134 4> "SPINLOCK13" 0x1
-        Tag <0xD0000138 4> "SPINLOCK14" 0x1
-        Tag <0xD000013c 4> "SPINLOCK15" 0x1
-        Tag <0xD0000140 4> "SPINLOCK16" 0x1
-        Tag <0xD0000144 4> "SPINLOCK17" 0x1
-        Tag <0xD0000148 4> "SPINLOCK18" 0x1
-        Tag <0xD000014c 4> "SPINLOCK19" 0x1
-        Tag <0xD0000150 4> "SPINLOCK20" 0x1
-        Tag <0xD0000154 4> "SPINLOCK21" 0x1
-        Tag <0xD0000158 4> "SPINLOCK22" 0x1
-        Tag <0xD000015c 4> "SPINLOCK23" 0x1
-        Tag <0xD0000160 4> "SPINLOCK24" 0x1
-        Tag <0xD0000164 4> "SPINLOCK25" 0x1
-        Tag <0xD0000168 4> "SPINLOCK26" 0x1
-        Tag <0xD000016c 4> "SPINLOCK27" 0x1
-        Tag <0xD0000170 4> "SPINLOCK28" 0x1
-        Tag <0xD0000174 4> "SPINLOCK29" 0x1
-        Tag <0xD0000178 4> "SPINLOCK30" 0x1
-        Tag <0xD000017c 4> "SPINLOCK31" 0x1
         Tag <0x4000C008 4> "RESET_DONE" 0xFFFFFFFF
         Tag <0x40024004 4> "XOSC_STATUS" 0xFFFFFFFF
         Tag <0x40028000 4> "PLL_SYS_CS" 0xFFFFFFFF
@@ -80,3 +47,15 @@ sysbus:
         Machine PyDevFromFile @scripts/pydev/rolling-bit.py 0x40008038 4 True "CLK_REF_SELECTED"
         Machine PyDevFromFile @scripts/pydev/rolling-bit.py 0x40008044 4 True "CLK_SYS_SELECTED"
         Tag <0x40008048 4> "CLK_PERI_CTRL" 0x880
+
+// Custom raspberry pico required to work.
+
+spinlocks: Python.PythonPeripheral @ sysbus 0xD0000100
+    size: 128
+    initable: true
+    filename: "/home/snelgrov/rtos.02/spinlock.py"
+
+divider: Python.PythonPeripheral @ sysbus 0xD0000060
+    size: 32
+    initable: true
+    filename: "/home/snelgrov/rtos.02/divider.py"
