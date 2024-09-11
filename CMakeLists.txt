@@ -7,10 +7,12 @@ endif()
 set(sdkVersion 2.0.0)
 set(toolchainVersion 13_2_Rel1)
 set(picotoolVersion 2.0.0)
-if(DEFINED ENV{PICO_SDK_PATH})
+if(EXISTS ${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
+    include(${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
+elseif(DEFINED ENV{PICO_SDK_PATH})
     set(PICO_SDK_PATH $ENV{PICO_SDK_PATH})
 else()
-    include(${USERHOME}/.pico-sdk/cmake/pico-vscode.cmake)
+    set(PICO_SDK_PATH lib/pico-sdk)
 endif()
 # ====================================================================================
 cmake_minimum_required(VERSION 3.13)
@@ -45,38 +47,8 @@ add_compile_definitions(
 # This is where your project header files are located.
 include_directories(${CMAKE_CURRENT_LIST_DIR}/include)
 
-# This is the main binary. List your C files here.
-add_executable(myproject
-    hello_freertos.c
-    )
-
-pico_set_program_name(myproject "test")
-pico_set_program_version(myproject "0.1")
-
-# Modify the below lines to enable/disable output over UART/USB.
-# These are mutually exclusive, only set one.
-pico_enable_stdio_uart(myproject 0)
-pico_enable_stdio_usb(myproject 1)
-
-# Add the libraries to the build
-target_link_libraries(myproject PRIVATE
-  pico_stdlib
-  pico_multicore
-  pico_async_context_freertos
-  FreeRTOS-Kernel-Heap4
-)
-
-# The CYW43 is the Wifi/Bluetooth module. If the board is set to pico_w, this
-# variable will be set and the wireless libraries added.
-if(PICO_CYW43_SUPPORTED)
-    # For led support on pico_w
-    target_link_libraries(myproject PRIVATE
-        pico_cyw43_arch_none
-    )
-endif()
-
-# Another pico macro which generates the uf2 file in addition to the elf
-pico_add_extra_outputs(myproject)
+# The main executable is defined inside the src directory.
+add_subdirectory(src)
 
 # The test configuration is inside the test directory.
 include(CTest)
