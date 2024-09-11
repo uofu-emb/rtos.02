@@ -53,9 +53,9 @@ sysbus:
 spinlocks: Python.PythonPeripheral @ sysbus 0xD0000100
     size: 128
     initable: true
-    filename: "/home/snelgrov/rtos.02/spinlock.py"
+    filename: "scripts/pydev/rp2040_spinlock.py"
 
 divider: Python.PythonPeripheral @ sysbus 0xD0000060
     size: 32
     initable: true
-    filename: "/home/snelgrov/rtos.02/divider.py"
+    filename: "scripts/pydev/rp2040_divider.py"
