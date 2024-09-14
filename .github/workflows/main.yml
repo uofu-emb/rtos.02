@@ -6,14 +6,10 @@ env:
   BUILD_TYPE: Release
 
 jobs:
-  checkup:
-    runs-on: [self-hosted, linux, x64]
-    steps:
-      - run: env
   build:
     runs-on: [self-hosted, linux, x64]
-    container:
-      image: ghcr.io/uofu-emb/pico-docker:main
+    # container:
+    #   image: ghcr.io/uofu-emb/pico-docker:main
     steps:
       - name: Clean workspace
         run: |
