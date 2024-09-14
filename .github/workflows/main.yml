@@ -9,7 +9,7 @@ jobs:
   build:
     runs-on: [self-hosted, linux, x64]
     container:
-      image: ghcr.io/uofu-emb/pico-docker@sha256:1a0946e4dc63ecbd7a879d17ecf5153fc0f8eabd118c97a13d237dd76f7c724b
+      image: ghcr.io/uofu-emb/pico-docker:main
     steps:
       - name: Clean workspace
         run: |
