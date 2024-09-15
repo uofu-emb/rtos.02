@@ -6,15 +6,15 @@
 
 #include <stdio.h>
 
+#include "FreeRTOS.h"
+#include "task.h"
+
 #include "pico/stdlib.h"
 #include "pico/multicore.h"
 
 #ifdef CYW43_WL_GPIO_LED_PIN
 #include "pico/cyw43_arch.h"
 #endif
-
-#include "FreeRTOS.h"
-#include "task.h"
 
 // Which core to run on if configNUMBER_OF_CORES==1
 #ifndef RUN_FREE_RTOS_ON_CORE
