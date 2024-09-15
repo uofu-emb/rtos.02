@@ -42,6 +42,7 @@ pico_sdk_init()
 # This sets a preprocessor value for use in our code.
 add_compile_definitions(
     configNUMBER_OF_CORES=1
+    PICO_ENTER_USB_BOOT_ON_EXIT=1
     )
 
 # This is where your project header files are located.
