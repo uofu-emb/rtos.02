@@ -16,11 +16,6 @@
 #include "pico/cyw43_arch.h"
 #endif
 
-// Which core to run on if configNUMBER_OF_CORES==1
-#ifndef RUN_FREE_RTOS_ON_CORE
-#define RUN_FREE_RTOS_ON_CORE 0
-#endif
-
 // Whether to flash the led
 #ifndef USE_LED
 #define USE_LED 1
@@ -83,25 +78,9 @@ void blink_task(__unused void *params) {
     printf("blink_task starts\n");
     pico_init_led();
     while (true) {
-#if configNUMBER_OF_CORES > 1
-        static int last_core_id = -1;
-        if (portGET_CORE_ID() != last_core_id) {
-            last_core_id = portGET_CORE_ID();
-            printf("blink task is on core %d\n", last_core_id);
-        }
-#endif
         pico_set_led(on);
         on = !on;
-
-#if LED_BUSY_WAIT
-        // You shouldn't usually do this. We're just keeping the thread busy,
-        // experiment with BLINK_TASK_PRIORITY and LED_BUSY_WAIT to see what happens
-        // if BLINK_TASK_PRIORITY is higher than TEST_TASK_PRIORITY main_task won't get any free time to run
-        // unless configNUMBER_OF_CORES > 1
-        busy_wait_ms(LED_DELAY_MS);
-#else
         sleep_ms(LED_DELAY_MS);
-#endif
     }
 }
 #endif // USE_LED
@@ -111,13 +90,6 @@ static void do_work(async_context_t *context, async_at_time_worker_t *worker) {
     async_context_add_at_time_worker_in_ms(context, worker, 10000);
     static uint32_t count = 0;
     printf("Hello from worker count=%u\n", count++);
-#if configNUMBER_OF_CORES > 1
-        static int last_core_id = -1;
-        if (portGET_CORE_ID() != last_core_id) {
-            last_core_id = portGET_CORE_ID();
-            printf("worker is on core %d\n", last_core_id);
-        }
-#endif
 }
 async_at_time_worker_t worker_timeout = { .do_work = do_work };
 
@@ -131,13 +103,6 @@ void main_task(__unused void *params) {
 #endif
     int count = 0;
     while(true) {
-#if configNUMBER_OF_CORES > 1
-        static int last_core_id = -1;
-        if (portGET_CORE_ID() != last_core_id) {
-            last_core_id = portGET_CORE_ID();
-            printf("main task is on core %d\n", last_core_id);
-        }
-#endif
         printf("Hello from main task count=%u\n", count++);
         vTaskDelay(3000);
     }
@@ -148,10 +113,6 @@ void vLaunch( void) {
     TaskHandle_t task;
     xTaskCreate(main_task, "MainThread", MAIN_TASK_STACK_SIZE, NULL, MAIN_TASK_PRIORITY, &task);
 
-#if configUSE_CORE_AFFINITY && configNUMBER_OF_CORES > 1
-    // we must bind the main task to one core (well at least while the init is called)
-    vTaskCoreAffinitySet(task, 1);
-#endif
 
     /* Start the tasks and timer running. */
     vTaskStartScheduler();
@@ -163,22 +124,7 @@ int main( void )
 
     /* Configure the hardware ready to run the demo. */
     const char *rtos_name;
-#if (configNUMBER_OF_CORES > 1)
-    rtos_name = "FreeRTOS SMP";
-#else
     rtos_name = "FreeRTOS";
-#endif
-
-#if (configNUMBER_OF_CORES > 1)
-    printf("Starting %s on both cores:\n", rtos_name);
     vLaunch();
-#elif (RUN_FREE_RTOS_ON_CORE == 1 && configNUMBER_OF_CORES==1)
-    printf("Starting %s on core 1:\n", rtos_name);
-    multicore_launch_core1(vLaunch);
-    while (true);
-#else
-    printf("Starting %s on core 0:\n", rtos_name);
-    vLaunch();
-#endif
     return 0;
 }
