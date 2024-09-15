@@ -41,3 +41,5 @@ add_test(NAME simulate_mytest COMMAND
      ${RENODE_FLAGS}
     -e "$ELF=@$<TARGET_FILE:mytest>; $WORKING=@${CMAKE_SOURCE_DIR}; include @${CMAKE_SOURCE_DIR}/test/simulate.resc; start"
     )
+
+add_custom_target(flash_test picotool load -f $<TARGET_FILE:mytest> DEPENDS mytest)
