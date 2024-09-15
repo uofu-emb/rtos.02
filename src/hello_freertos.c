@@ -26,19 +26,6 @@
 #define BLINK_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
 #define WORKER_TASK_STACK_SIZE configMINIMAL_STACK_SIZE
 
-#include "pico/async_context_freertos.h"
-static async_context_freertos_t async_context_instance;
-
-// Create an async context
-static async_context_t *example_async_context(void) {
-    async_context_freertos_config_t config = async_context_freertos_default_config();
-    config.task_priority = WORKER_TASK_PRIORITY; // defaults to ASYNC_CONTEXT_DEFAULT_FREERTOS_TASK_PRIORITY
-    config.task_stack_size = WORKER_TASK_STACK_SIZE; // defaults to ASYNC_CONTEXT_DEFAULT_FREERTOS_TASK_STACK_SIZE
-    if (!async_context_freertos_init(&async_context_instance, &config))
-        return NULL;
-    return &async_context_instance.core;
-}
-
 void blink_task(__unused void *params) {
     bool on = false;
     printf("blink_task starts\n");
@@ -50,26 +37,13 @@ void blink_task(__unused void *params) {
     }
 }
 
-// async workers run in their own thread when using async_context_freertos_t with priority WORKER_TASK_PRIORITY
-static void do_work(async_context_t *context, async_at_time_worker_t *worker) {
-    async_context_add_at_time_worker_in_ms(context, worker, 10000);
-    static uint32_t count = 0;
-    printf("Hello from worker count=%u\n", count++);
-}
-async_at_time_worker_t worker_timeout = { .do_work = do_work };
-
 void main_task(__unused void *params) {
-    async_context_t *context = example_async_context();
-    // start the worker running
-    async_context_add_at_time_worker_in_ms(context, &worker_timeout, 0);
-    // start the led blinking
     xTaskCreate(blink_task, "BlinkThread", BLINK_TASK_STACK_SIZE, NULL, BLINK_TASK_PRIORITY, NULL);
     int count = 0;
     while(true) {
         printf("Hello from main task count=%u\n", count++);
         vTaskDelay(3000);
     }
-    async_context_deinit(context);
 }
 
 void vLaunch( void) {
