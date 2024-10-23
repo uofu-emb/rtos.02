@@ -42,4 +42,6 @@ add_test(NAME simulate_mytest COMMAND
     -e "$ELF=@$<TARGET_FILE:mytest>; $WORKING=@${CMAKE_SOURCE_DIR}; include @${CMAKE_SOURCE_DIR}/test/simulate.resc; start"
     )
 
+set(OPENOCD_SCRIPTS /usr/share/openocd/scripts)
 add_custom_target(flash_test picotool load -f $<TARGET_FILE:mytest> DEPENDS mytest)
+add_custom_target(ocd_test openocd -s $OPENOCD_SCRIPTS -f interface/cmsis-dap.cfg -f target/rp2040.cfg -c "adapter speed 5000; program '$<TARGET_FILE:mytest>' verify reset exit" DEPENDS mytest)

@@ -51,11 +51,12 @@ int main (void)
 {
     stdio_init_all();
     hard_assert(cyw43_arch_init() == PICO_OK);
-    sleep_ms(5000); // Give time for TTY to attach.
-    printf("Start tests\n");
-    UNITY_BEGIN();
-    RUN_TEST(test_change_case);
-    RUN_TEST(test_blinking);
-    sleep_ms(5000);
-    return UNITY_END();
+    while(1) {
+	sleep_ms(5000); // Give time for TTY to attach.
+	printf("Start tests\n");
+	UNITY_BEGIN();
+	RUN_TEST(test_change_case);
+	RUN_TEST(test_blinking);
+	UNITY_END();
+    }
 }
