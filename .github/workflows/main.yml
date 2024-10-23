@@ -4,12 +4,15 @@ on: [push, pull_request]
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
+  PICO_SDK_PATH: /usr/local/share/pico/pico-sdk
+  FREERTOS_KERNEL_PATH: /usr/local/share/pico/FreeRTOS-Kernel
+  UNITY_PATH: /usr/local/share/pico/Unity
+  OPENOCD_PATH: /usr/share/openocd
+  PICO_TOOLCHAIN_PATH: /usr/bin
 
 jobs:
   build:
     runs-on: [self-hosted, linux, x64]
-    # container:
-    #   image: ghcr.io/uofu-emb/pico-docker:main
     steps:
       - name: Clean workspace
         run: |
